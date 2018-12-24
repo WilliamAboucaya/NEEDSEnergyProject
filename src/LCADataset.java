@@ -1,6 +1,7 @@
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.apache.jena.ontology.OntDocumentManager;
 import org.apache.jena.ontology.OntModel;
@@ -33,7 +34,7 @@ public class LCADataset {
 		model.read(in, null);
 	}
 	
-	public InOutValue getInOutValue(String name) {
+	public InOutValue getInOutValue(String name) throws NoSuchElementException {
 		InOutValue inOut = new InOutValue(name);
 		
 		for (String urlIdentifier : getUrlIdentifiers(name)) {
@@ -51,7 +52,7 @@ public class LCADataset {
 		return inOut;
 	}
 	
-	private String[] getUrlIdentifiers(String name) {
+	private String[] getUrlIdentifiers(String name) throws NoSuchElementException {
 		StringBuilder queryString = new StringBuilder("SELECT DISTINCT ?s ?p ?o WHERE {?s ?p \"")
 				.append(name)
 				.append("\"}");
@@ -64,6 +65,10 @@ public class LCADataset {
 
 		List<String> urlIdentifiersList = new ArrayList<>();
 
+		if (!rs.hasNext()) {
+			throw new NoSuchElementException("This dataset has no entry for name \"" + name + "\"");
+		}
+		
 		while (rs.hasNext()) {
 			QuerySolution sol = rs.nextSolution();
 			urlIdentifiersList.add(sol.getResource("s").toString());
