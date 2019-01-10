@@ -1,3 +1,4 @@
+package com.isep.needsEnergyProject;
 
 public class InOutValue {
 	
