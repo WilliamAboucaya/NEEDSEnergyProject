@@ -64,8 +64,12 @@ public class InOutValue {
 		return new StringBuilder(name)
 				.append(" : \nInput : ")
 				.append(inAmount)
+				.append(" ")
+				.append(unit)
 				.append("\nOutput : ")
 				.append(outAmount)
+				.append(" ")
+				.append(unit)
 				.toString();
 	}
 }
