@@ -2,8 +2,16 @@ package com.isep.needsEnergyProject;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * 
+ * Implements the Command Line Interface (CLI) allowing the user to search for an element and to display the amount
+ * of this unit needed and produced to create 1 MWh of electric energy via biomass and nuclear production
+ * 
+ * @author William Aboucaya
+ *
+ */
 public class Main {
-	
+		
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		

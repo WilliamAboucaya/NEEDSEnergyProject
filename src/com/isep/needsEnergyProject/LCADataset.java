@@ -17,9 +17,22 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.util.FileManager;
 
+/**
+ * The object representation of a LCA dataset. Allows to make searches for 
+ * the input and output values of an element in the dataset from its name.
+ * 
+ * @author William Aboucaya
+ *
+ */
 public class LCADataset {
 
 	private Model model;
+	
+	/**
+	 * Instantiates a new {@link LCADataset} for the indicated RDF file. Defines its ontology and stores its {@link Model}
+	 * 
+	 * @param path The relative path to the RDF file we want to get.
+	 */
 	
 	public LCADataset(String path) {
 		OntModelSpec s = new OntModelSpec(OntModelSpec.RDFS_MEM);
@@ -34,6 +47,14 @@ public class LCADataset {
 		}
 		model.read(in, null);
 	}
+	
+	/**
+	 * Searches through the dataset to find the input and output quantities of the requested element.
+	 * 
+	 * @param name the name of the element.
+	 * @return the {@link InOutValue} object containing the produced and needed amount of the chosen element.
+	 * @throws NoSuchElementException if the entry doesn't exist.
+	 */
 	
 	public InOutValue getInOutValue(String name) throws NoSuchElementException {
 		InOutValue inOut = new InOutValue(name);
@@ -53,6 +74,12 @@ public class LCADataset {
 		return inOut;
 	}
 	
+	/**
+	 * 
+	 * @param name the name of the element.
+	 * @return the fixed identifier of an element.
+	 * @throws NoSuchElementException NoSuchElementException if the entry doesn't exist.
+	 */
 	private String[] getUrlIdentifiers(String name) throws NoSuchElementException {
 		StringBuilder queryString = new StringBuilder("SELECT DISTINCT ?s ?p ?o WHERE {?s ?p \"")
 				.append(name)
@@ -78,6 +105,12 @@ public class LCADataset {
 		return urlIdentifiersList.toArray(new String[1]);
 	}
 	
+	/**
+	 * 
+	 * @param urlIdentifier the fixed identifier of an element.
+	 * @return the generated node ID
+	 */
+	
 	private String getNodeId(String urlIdentifier) {
 		String nodeId = "";
 		
@@ -96,6 +129,10 @@ public class LCADataset {
 		return nodeId;
 	}
 	
+	/**
+	 * @param nodeId the generated node ID of this specific flow
+	 * @return the amount related to this flow.
+	 */
 	public double getAmountUsed(String nodeId) {
 		double res = 0;
 
@@ -115,6 +152,10 @@ public class LCADataset {
 		return res;
 	}
 	
+	/**
+	 * @param nodeId the generated node ID of this specific flow
+	 * @return true if the amount described is needed for the production in this flow, false if it is produced.
+	 */
 	public boolean isInput(String nodeId) {
 		boolean input = false;
 		
@@ -134,6 +175,10 @@ public class LCADataset {
 		return input;
 	}
 	
+	/**
+	 * @param urlIdentifier the fixed identifier of an element.
+	 * @return the unit in which the amounts are quantified for this element
+	 */
 	private String getUnit(String urlIdentifier) {
 		StringBuilder queryString = new StringBuilder("SELECT DISTINCT ?s ?p ?o WHERE {")
 				.append("<")

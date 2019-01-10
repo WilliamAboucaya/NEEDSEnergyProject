@@ -1,5 +1,10 @@
 package com.isep.needsEnergyProject;
 
+/**
+ * The object representation of the amount used and produced of an element with a specific unit.
+ * 
+ * @author William Aboucaya
+ */
 public class InOutValue {
 	
 	private final String name;
@@ -52,6 +57,9 @@ public class InOutValue {
 		this.unit = unit;
 	}
 	
+	/**
+	 * @return a readable representation of this object to display it on a CLI.
+	 */
 	public String toDescriptionString() {
 		return new StringBuilder(name)
 				.append(" : \nInput : ")
